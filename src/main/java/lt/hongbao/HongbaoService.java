@@ -32,7 +32,8 @@ public class HongbaoService extends AccessibilityService {
     private static final int MAX_CACHE_TOLERANCE = 5000;
     private boolean mCycle = false;
 
-  String TAG="hongbao";
+    String TAG = "hongbao";
+
     /**
      * AccessibilityEvent的回调方法
      *
@@ -69,8 +70,9 @@ public class HongbaoService extends AccessibilityService {
         if (mLuckyMoneyReceived && !mLuckyMoneyPicked && (mReceiveNode != null)) {
             String id = getHongbaoText(mReceiveNode);
             long now = System.currentTimeMillis();
-            if (this.shouldReturn(id, now - lastFetchedTime)){
-                return;}
+            if (this.shouldReturn(id, now - lastFetchedTime)) {
+                return;
+            }
             mCycle = true;
             lastFetchedHongbaoId = id;
             lastFetchedTime = now;
@@ -80,7 +82,7 @@ public class HongbaoService extends AccessibilityService {
                 public void run() {
                     cellNode.getParent().performAction(AccessibilityNodeInfo.ACTION_CLICK);
                 }
-            },5);
+            }, 5);
 
             mLuckyMoneyReceived = false;
             mLuckyMoneyPicked = true;
@@ -130,13 +132,22 @@ public class HongbaoService extends AccessibilityService {
 //            mNeedUnpack = true;
 //            return;
 //        }
-        AccessibilityNodeInfo node2 = this.rootNodeInfo.getChild(3);
-        if (node2 != null && node2.getClassName().equals("android.widget.Button")) {
-            mUnpackNode = node2;
-            mNeedUnpack = true;
+        if (this.rootNodeInfo.getChildCount() == 0) {
             return;
         }
-
+        for (int i = 0, len = this.rootNodeInfo.getChildCount(); i < len; i++) {
+            if (!mLuckyMoneyPicked) {
+                return;
+            }
+            AccessibilityNodeInfo node2 = this.rootNodeInfo.getChild(i);
+            checkNoe(node2, i + "");
+//            if (node2 != null && node2.getClassName().equals("android.widget.Button")) {
+//                Log.e(TAG, "红包找到");
+//                mUnpackNode = node2;
+//                mNeedUnpack = true;
+//                break;
+//            }
+        }
         /* 戳开红包，红包已被抢完，遍历节点匹配“红包详情”和“手慢了” */
         if (mLuckyMoneyPicked) {
             List<AccessibilityNodeInfo> nodes3 = this.findAccessibilityNodeInfosByTexts(this.rootNodeInfo, new String[]{
@@ -145,6 +156,23 @@ public class HongbaoService extends AccessibilityService {
             if (!nodes3.isEmpty()) {
                 mNeedBack = true;
                 mLuckyMoneyPicked = false;
+            }
+        }
+    }
+
+    public void checkNoe(AccessibilityNodeInfo node, final String s) {
+        if (null == node) return;
+        final int count = node.getChildCount();
+        if (count > 0) {
+            for (int i = 0; i < count; i++) {
+                AccessibilityNodeInfo childNode = node.getChild(i);
+                checkNoe(childNode, "--" + s + "--" + i);
+            }
+        } else {
+            if (node.getClassName().equals("android.widget.Button")) {
+                mUnpackNode = node;
+                mNeedUnpack = true;
+                return;
             }
         }
     }
@@ -205,5 +233,6 @@ public class HongbaoService extends AccessibilityService {
 
         return false;
     }
-    Handler handle=new Handler();
+
+    Handler handle = new Handler();
 }

@@ -31,7 +31,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         initListener();
     }
     private void initView() {
-        toolbar= (Toolbar) findViewById(R.id.toolbar);
         startNotfic= (Button) findViewById(R.id.startMonitor);
         startServiceForWX= (Button) findViewById(R.id.startServiceForWX);
     }
