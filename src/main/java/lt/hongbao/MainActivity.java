@@ -21,7 +21,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button startNotfic;
     private Button startServiceForWX;
     private static final Intent starHongbaoIntent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);//开启插件的Intent
-    private  static  final Intent startNotficIntent=new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");//开启通知监听的插件
+
+    private  static  final Intent startNotficIntent=new Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS);//开启通知监听的插件
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
