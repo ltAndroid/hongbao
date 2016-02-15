@@ -5,4 +5,10 @@ package lt.hongbao;
  * 分支测试类
  */
 public class Test1 {
+    /**
+     * 分支方法一
+     */
+    public void fun01(){
+
+    }
 }
