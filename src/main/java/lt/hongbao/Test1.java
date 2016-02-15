@@ -6,9 +6,10 @@ package lt.hongbao;
  */
 public class Test1 {
     /**
-     * 分支方法一
+     * 删除分支方法一
+     * 添加分支方法二
      */
-    public void fun01(){
+    public void fun02(){
 
     }
 }
